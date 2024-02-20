@@ -1,0 +1,82 @@
+SELECT
+    --Id, IDENTITY
+    '(SELECT Id FROM ClienteOnline..tbFuncionario (NOLOCK) WHERE IdCliente = ' + CAST(E.CODI_EMP AS VARCHAR) + ' AND CAST(Chapa AS INT) = ' + CAST(E.i_empregados AS VARCHAR) + ')' IdFuncionario, 
+    '''' + REPLACE(admissao, '-','') + '''' DataAdmissao, 
+    QUANTIDADE_DIAS_CONTRATO_EXPERIENCIA PrimeiroPeriodoExperiencia, 
+    QUANTIDADE_DIAS_PRORROGACAO_CONTRATO_EXPERIENCIA SegundoPeriodoExperiencia, 
+    i_cargos IdCargoCliente, 
+    NULL IdFuncao, 
+    i_depto IdSecao, 
+    24 IdAuxiliarTipoAdmissao, 
+    28 IdAuxiliarTipoIndicativoAdmissao, 
+    CALCULAR_ADIANTAMENTO_SALARIAL HasAdiantamento, 
+    NULL HasValeTransporte, 
+    CASE
+        WHEN A.numero = '' THEN NULL 
+        WHEN A.numero IS NULL THEN NULL 
+        ELSE '(SELECT Id FROM ClienteOnline..tbBancos (NOLOCK) WHERE Codigo = ''' + CAST(A.numero AS VARCHAR) + ''')' 
+    END IdBanco, 
+    A.agencia Agencia, 
+    CASE
+        WHEN conta_corr = '' THEN NULL 
+        ELSE conta_corr
+    END ContaCorrente, 
+    CASE
+        WHEN DIGITO_CONTA_PAGAMENTO = '' THEN NULL 
+        ELSE DIGITO_CONTA_PAGAMENTO
+    END ContaCorrenteDigito, 
+    NULL IdAuxiliarContribuicaoSindical, 
+    NULL FiliacaoSindicalValor, 
+    i_sindicatos FiliacaoSindicalCNPJ, 
+    NULL IsOptante, 
+    NULL DataOpcao, 
+    REPLACE(CAST(salario AS MONEY), ',', '.') Salario, 
+    34 IdAuxiliarFormaRecebimento, 
+    40 IdAuxiliarTipoSalarioContratual, 
+    deficiente_fisico IsDeficienteFisico, 
+    POSSUI_DEFICIENCIA_VISUAL IsDeficienteVisual, 
+    0 IsDeficienteFala, 
+    POSSUI_DEFICIENCIA_AUDITIVA IsDeficienteAuditivo, 
+    0 IsDeficienteMental, 
+    POSSUI_DEFICIENCIA_INTELECTUAL IsDeficienteIntelectual, 
+    POSSUI_DEFICIENCIA_REABILITADO IsReabilitado, 
+    NULL Observacao, 
+    NULL SucessaoVinculoCNPJ, 
+    NULL SucessaoVinculoNumeroMatricula, 
+    NULL SucessaoVinculoDataInicio, 
+    NULL SucessaoVinculoObservacao, 
+    NULL IdAuxiliarTipoRegimeTrabalho, 
+    NULL IdAuxiliarRegimeJornada, 
+    1 IdCategoriasTrabalhador, 
+    NULL NaturezaAtividade, 
+    NULL IdAuxiliarTipoContrato, 
+    NULL DataTermino, 
+    NULL QuantidadeMediaHoras, 
+    NULL IdAuxiliarMotivoContratacao, 
+    NULL TrabalhadorSubstitutoCPF, 
+    NULL TrabalhadorSubstitutoMatricula, 
+    NULL NumeroProcessoJuridico, 
+    I_JORNADA CodigoHorarioDescricao, 
+    0 IsEstagio, 
+    NULL IdAuxiliarNivelEstagiario, 
+    NULL EstagiarioAreaAtuacao, 
+    NULL EstagiarioNumeroApolice, 
+    NULL EstagiarioCPFSupervisor, 
+    NULL EstagiarioNomeSupervisor, 
+    NULL DataAtestadoASO, 
+    NULL MedicoASO, 
+    NULL DDDASO, 
+    NULL TelefoneASO, 
+    NULL NumeroCRMASO, 
+    NULL IdEstadoEmissorASO, 
+    NULL StatusTrabalhista, 
+    NULL EstagiarioDataPrevistaTermino, 
+    NULL HasSeguroDesemprego, 
+    1 IdUsuarioInclusao, 
+    '''' + REPLACE(CAST(GETDATE() AS DATE), '-', '') + '''' DataInclusao, 
+    NULL IdUsuarioAlteracao, 
+    NULL DataAlteracao
+FROM "bethadba"."foempregados" E
+    LEFT JOIN "bethadba"."fobancos" A
+        ON E.i_bancos = A.i_bancos
+WHERE CODI_EMP = @IdCliente

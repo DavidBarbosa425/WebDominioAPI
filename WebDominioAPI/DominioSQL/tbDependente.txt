@@ -1,0 +1,33 @@
+SELECT 
+    CODI_EMP IdCliente, 
+    '(SELECT Id FROM ClienteOnline..tbFuncionario WHERE IdCliente = ' + CAST(CODI_EMP AS VARCHAR) + ' AND CAST(Chapa AS INT) = ' + CAST(i_empregados AS VARCHAR) + ')' IdFuncionario, 
+    '''' + nome + '''' Nome, 
+    CPF CPF, 
+    '''' + REPLACE(data_nascto, '-', '') + '''' Nascimento, 
+    grau_parentesco IdCodParent, 
+    NULL Sexo, 
+    1 IdCodEstCivil,
+    '''' + local_nascto + '''' LocalNascimento, 
+    cartorio_registro Registro, 
+    nlivro Livro, 
+    nfolha Folha, 
+    cartorio_registro Cartorio,
+    CAST(CASE
+        WHEN dependente = 'S' THEN 1
+        ELSE 0
+    END AS VARCHAR) IRRF,
+    CAST(CASE
+        WHEN filho = 'S' THEN 1
+        ELSE 0
+    END AS VARCHAR) SalarioFamilia,
+    0 EntregouComprovanteEscolar, 
+    0 EntregouCartaoVacina, 
+    0 Universitario_CursandoTecnico, 
+    '''' + REPLACE(CAST(data_entrega AS DATE),'-','') + '''' DataEntregaCertidao, 
+    '2' StatusImportacao, 
+    1 IdUsuarioInclusao, 
+    '''' + REPLACE(CAST(GETDATE() AS DATE), '-','') + '''' DataInclusao, 
+    NULL IdUsuarioAlteracao, 
+    NULL DataAlteracao 
+FROM "bethadba"."fofilhos" 
+WHERE codi_emp = @IdCliente
